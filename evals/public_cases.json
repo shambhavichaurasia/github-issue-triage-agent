@@ -1,0 +1,82 @@
+[
+  {
+    "id": "psf-requests-6544",
+    "source_repo": "psf/requests",
+    "issue_number": 6544,
+    "source_url": "https://github.com/psf/requests/issues/6544",
+    "source_label": "Bug",
+    "title": "Conflicting requirements for urllib3",
+    "body": "In origin/main ee93fac6b2f7 I find conflicting required urllib3 version information:\r\n\r\n```\r\nsetup.cfg:10:    urllib3>=1.21.1,<1.27\r\nsetup.py:64:    \"urllib3>=1.21.1,<3\",\r\n```\r\n\r\nShouldn't both files have the same restrictions?\r\n\r\nBest regards\r\n\r\nHeinrich",
+    "expected_label": "bug"
+  },
+  {
+    "id": "fastapi-fastapi-16010",
+    "source_repo": "fastapi/fastapi",
+    "issue_number": 16010,
+    "source_url": "https://github.com/fastapi/fastapi/issues/16010",
+    "source_label": "bug",
+    "title": "app.frontend() with fallback=\"index.html\" returns 404 for client side routes that have a dot in the last path segment (like /users/john.doe or /v/1.2.3)",
+    "body": "### Discussed in https://github.com/fastapi/fastapi/discussions/15979\n\n<div type='discussions-op-text'>\n\n<sup>Originally posted by **UditDewan** July 12, 2026</sup>\n### First Check\n\n- [x] I added a very descriptive title here.\n- [x] I used the GitHub search to find a similar question and didn't find it.\n- [x] I searched the FastAPI documentation, with the integrated search.\n- [x] I already searched in Google \"How to X in FastAPI\" and didn't find any information.\n- [x] I already read and followed all the tutorial in the docs and didn't find an answer.\n- [x] I already checked if it is not related to FastAPI but to Pydantic.\n- [x] I already checked if it is not related to FastAPI but to Swagger UI.\n- [x] I already checked if it is not related to FastAPI but to ReDoc.\n\n### Commit to Help\n\n- [x",
+    "expected_label": "bug"
+  },
+  {
+    "id": "psf-requests-5902",
+    "source_repo": "psf/requests",
+    "issue_number": 5902,
+    "source_url": "https://github.com/psf/requests/issues/5902",
+    "source_label": "Documentation",
+    "title": "DOC,BUG: 404: Spanish translation links require .html",
+    "body": "At least the Spanish translation links in the RTD widget are 404'ing.\r\n\r\n1. https://docs.python-requests.org/en/master/user/quickstart/\r\n2. Click 'es' under Languages in the RTD widget\r\n3. 404\r\n\r\nFrom @astrojuanlu \r\nhttps://twitter.com/juanluisback/status/1425742688595464200 :\r\n\r\n> It is indeed available, but notice the .html at the end of the URL https://docs.python-requests.org/es/latest/user/quickstart.html\r\n> \r\n> Looks like the configuration of the projects is not uniform. Would you open an issue on the requests tracker? Feel free to ping me, happy to help!",
+    "expected_label": "documentation"
+  },
+  {
+    "id": "fastapi-fastapi-12419",
+    "source_repo": "fastapi/fastapi",
+    "issue_number": 12419,
+    "source_url": "https://github.com/fastapi/fastapi/issues/12419",
+    "source_label": "docs",
+    "title": "Question about \"Required, can be None\" parameter",
+    "body": "### Discussed in https://github.com/fastapi/fastapi/discussions/12418\r\n\r\n<div type='discussions-op-text'>\r\n\r\n<sup>Originally posted by **bowenerchen** October 10, 2024</sup>\r\n### First Check\r\n\r\n- [X] I added a very descriptive title here.\r\n- [X] I used the GitHub search to find a similar question and didn't find it.\r\n- [X] I searched the FastAPI documentation, with the integrated search.\r\n- [X] I already searched in Google \"How to X in FastAPI\" and didn't find any information.\r\n- [X] I already read and followed all the tutorial in the docs and didn't find an answer.\r\n- [X] I already checked if it is not related to FastAPI but to [Pydantic](https://github.com/pydantic/pydantic).\r\n- [X] I already checked if it is not related to FastAPI but to [Swagger UI](https://github.com/swagger-api/swagg",
+    "expected_label": "documentation"
+  },
+  {
+    "id": "psf-requests-7621",
+    "source_repo": "psf/requests",
+    "issue_number": 7621,
+    "source_url": "https://github.com/psf/requests/issues/7621",
+    "source_label": "Feature Request",
+    "title": "API-provided proxies are silently overridden by environment variables; no per-request opt-out",
+    "body": "Summary\nRequests automatically uses environment proxies from HTTP_PROXY, HTTPS_PROXY, etc. There is currently no clean per-request way to disable this behavior. The only reliable workaround is to create a Session and set ```session.trust_env = False.```\n\nCurrent behavior\nWhen proxy-related environment variables are present, a simple request such as:\n```\nrequests.get(url, proxies={})\n```\nstill uses the environment proxy. Passing an empty proxies dict does not mean “disable all proxies”; it means “no API-level proxy was provided”, so environment proxies are merged in by Session.merge_environment_settings() when trust_env is True.\n\nTo actually bypass environment proxies, users must write:\n\n```\nsession = requests.Session()\nsession.trust_env = False\nsession.get(url)\n```\nThey cannot write:\n\n```\n",
+    "expected_label": "enhancement"
+  },
+  {
+    "id": "fastapi-fastapi-12965",
+    "source_repo": "fastapi/fastapi",
+    "issue_number": 12965,
+    "source_url": "https://github.com/fastapi/fastapi/issues/12965",
+    "source_label": "feature",
+    "title": "Will FastAPI support QUERY http method? \"app.query\"",
+    "body": "### Discussed in https://github.com/fastapi/fastapi/discussions/6049\r\n\r\n<div type='discussions-op-text'>\r\n\r\n<sup>Originally posted by **FilipeMarch** December 16, 2022</sup>\r\n### First Check\r\n\r\n- [X] I added a very descriptive title to this issue.\r\n- [X] I used the GitHub search to find a similar issue and didn't find it.\r\n- [X] I searched the FastAPI documentation, with the integrated search.\r\n- [X] I already searched in Google \"How to X in FastAPI\" and didn't find any information.\r\n- [X] I already read and followed all the tutorial in the docs and didn't find an answer.\r\n- [X] I already checked if it is not related to FastAPI but to [Pydantic](https://github.com/samuelcolvin/pydantic).\r\n- [X] I already checked if it is not related to FastAPI but to [Swagger UI](https://github.com/swagger",
+    "expected_label": "enhancement"
+  },
+  {
+    "id": "psf-requests-7622",
+    "source_repo": "psf/requests",
+    "issue_number": 7622,
+    "source_url": "https://github.com/psf/requests/issues/7622",
+    "source_label": "Question/Not a bug",
+    "title": "Encoding of escaped values in parameter?",
+    "body": "Hi,\n\nI get a token from a server that's something like \"FOO%3D\". I need to return this token to the server as is, but when I set this value as a parameter to a URL, requests encodes the `%` as `%25`, so the string that gets sent is \"FOO%253D\". I see that there was an issue regarding this kind of thing (https://github.com/psf/requests/issues/5461) and it seems to have been resolved as to always encode the percent as if it were a literal, rather than part of the escaped value (%3D in my case).\n\nIs there some decent way I can send the token as a parameter literally without requests trying to re-interpret what I've provided?\n\nThanks,",
+    "expected_label": "question"
+  },
+  {
+    "id": "fastapi-fastapi-15762",
+    "source_repo": "fastapi/fastapi",
+    "issue_number": 15762,
+    "source_url": "https://github.com/fastapi/fastapi/issues/15762",
+    "source_label": "question",
+    "title": "0.137.0: empty-path route nested under prefix-less outer include raises 'Prefix and path cannot be both empty'",
+    "body": "### Discussed in https://github.com/fastapi/fastapi/discussions/15750\n\n<div type='discussions-op-text'>\n\n<sup>Originally posted by **yeonghun-toggle** June 15, 2026</sup>\n### First Check\n\n- [X] I added a very descriptive title here.\n- [X] I used the GitHub search to find a similar question and didn't find it.\n- [X] I searched the FastAPI documentation, with the integrated search.\n- [X] I already searched in Google \"How to X in FastAPI\" and didn't find any information.\n- [X] I already read and followed all the tutorial in the docs and didn't find an answer.\n- [X] I already checked if it is not related to FastAPI but to [Pydantic](https://github.com/pydantic/pydantic).\n- [X] I already checked if it is not related to FastAPI but to [Swagger UI](https://github.com/swagger-api/swagger-ui).\n- [X",
+    "expected_label": "question"
+  }
+]

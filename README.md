@@ -1,36 +1,67 @@
 # GitHub Issue Triage Agent
 
-Agentic AI project that **reads public GitHub issues**, optionally **searches code**, and **suggests labels + a draft maintainer reply**.
+A human-in-the-loop agent that reads public GitHub issues, searches related
+repository code, and proposes labels plus a maintainer-ready draft response.
 
-**Human approval required.** v1 never posts comments or changes GitHub.
+The application is deliberately read-only: it never comments on, labels, or
+changes a GitHub repository.
 
-Built for a student portfolio / SDE-1 agentic AI interviews (free stack).
+## Why this project exists
 
-## What recruiters should hear (30 sec)
+Popular open-source repositories receive issues that must be understood,
+categorized, and answered before engineering work begins. This project
+automates that first-pass triage while keeping a human responsible for the
+final decision.
 
-> I built a tool-calling agent over the GitHub API. It lists issues, reads an issue, can search code, then drafts labels and a reply. Nothing is written back unless a human approves — and in this MVP we only record approve/reject locally.
+## Features
 
-## Features (MVP)
+- Tool-calling loop with `list_open_issues`, `get_issue`, and `search_code`
+- Structured output containing labels, confidence, rationale, draft reply, and
+  related files
+- Editable human review with approval, rejection, and JSON download
+- Full tool trace showing requested and actually executed arguments
+- Repository and issue scope enforcement for every tool call
+- Pydantic schema validation for untrusted AI output
+- Draft safety checks that reject promises or false maintainer authority
+- Friendly free-tier rate-limit handling
+- Synthetic and public-issue evaluation benchmarks
+- 29 automated tests that run without consuming API quota
 
-- Tool calling: `list_open_issues`, `get_issue`, `search_code`
-- Structured suggestion: labels, confidence, rationale, draft reply
-- Tool trace visible in the UI
-- Local Approve / Reject (no GitHub write)
-- Free LLM: Groq **or** Gemini
+## Architecture
 
-## Stack
+```mermaid
+flowchart LR
+    U[User] --> UI[Streamlit UI]
+    UI --> A[Agent loop]
+    A --> L[Groq or Gemini LLM]
+    L -->|Tool request| G[Scope guard]
+    G --> T[GitHub tools]
+    T --> API[Public GitHub API]
+    API --> T --> A
+    A --> V[Pydantic + safety validation]
+    V -->|Invalid: request rewrite| L
+    V -->|Valid suggestion| H[Human approve or reject]
+```
 
-| Piece | Choice |
-|--------|--------|
-| Language | Python |
-| UI | Streamlit |
-| GitHub | PyGithub + personal access token |
-| LLM | Groq or Gemini (free tier) |
-| Config | `.env` |
+The issue text, comments, repository content, tool arguments, and model output
+are all treated as untrusted input.
 
-## Setup (local)
+## Technology
+
+- Python
+- Streamlit
+- PyGithub
+- Groq API (tested) with an optional Gemini adapter (not validated in this run)
+- Pydantic
+- pytest
+- Local environment variables via `python-dotenv`
+
+All services used by the MVP have a free option.
+
+## Local setup
 
 ```bash
+git clone https://github.com/shambhavichaurasia/github-issue-triage-agent.git
 cd github-issue-triage-agent
 python3 -m venv .venv
 source .venv/bin/activate
@@ -38,44 +69,98 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-Edit `.env`:
+Add secrets to `.env`:
 
-1. `GITHUB_TOKEN` — [create a classic PAT](https://github.com/settings/tokens) (read access to public repos is enough)
-2. Pick **one**:
-   - `LLM_PROVIDER=groq` + `GROQ_API_KEY` from [Groq Console](https://console.groq.com/keys)
-   - `LLM_PROVIDER=gemini` + `GEMINI_API_KEY` from [Google AI Studio](https://aistudio.google.com/apikey)
+1. `GITHUB_TOKEN`: a personal token with only the minimum read-only access
+   required for public repositories. Do not grant private-repository or write
+   permissions.
+2. Choose one free LLM provider:
+   - Tested path: `LLM_PROVIDER=groq` and `GROQ_API_KEY`
+   - Optional adapter: `LLM_PROVIDER=gemini` and `GEMINI_API_KEY`
 
-Run:
+`.env` is excluded from Git and must never be committed.
+
+Run the app:
 
 ```bash
 streamlit run app.py
 ```
 
-Try repo: `psf/requests` (public, always available).
+Try `psf/requests` with issue `7627`.
 
-## Project layout
+## Testing
+
+Install development dependencies and run all local tests:
+
+```bash
+pip install -r requirements-dev.txt
+pytest -q
+```
+
+The test suite covers:
+
+- unsafe and neutral draft replies
+- structured JSON extraction
+- repository-input validation
+- strict triage-output schema validation
+- repository and issue tool-scope enforcement
+- evaluation parsing and scoring
+
+## Evaluation
+
+The app contains two reproducible label-classification benchmarks:
+
+- **Synthetic cases:** eight clear, locally stored examples
+- **Public cases:** eight traceable issues from `psf/requests` and
+  `fastapi/fastapi`, using repository labels as expected answers
+
+One observed run scored 8/8 on synthetic cases and 5/8 on public cases. The
+public result is the more realistic baseline because repository labels can
+encode maintainer conventions that are not obvious from issue text. Scores may
+vary by model and run.
+
+The public dataset can be refreshed with:
+
+```bash
+python -m evals.build_public_cases
+```
+
+## Project structure
 
 ```text
-app.py                 # Streamlit UI
-src/config.py          # env settings
-src/github_tools.py    # tools (work even without LLM)
-src/agent.py           # LLM + tool loop
-examples/              # sample outputs for README/resume
+app.py                       Streamlit application
+src/agent.py                 Agent loop, provider calls, and safety controls
+src/github_tools.py          Read-only GitHub tools
+src/models.py                Validated triage-output schema
+src/evaluation.py            Benchmark runner and scoring
+src/config.py                Environment configuration
+evals/cases.json             Synthetic benchmark
+evals/public_cases.json      Traceable public benchmark
+evals/build_public_cases.py  Public dataset builder
+tests/                       Offline automated tests
+examples/                    Example output
 ```
+
+## Current limitations
+
+- Approval decisions exist only in the current browser session.
+- The app suggests work but does not create patches or pull requests.
+- Free LLM tiers can temporarily rate-limit requests.
+- Public repository labels are not standardized across projects.
+
+## Recruiter summary
+
+> I built a read-only GitHub triage agent that autonomously chooses tools to
+> inspect issues and code, then produces a validated label and draft response.
+> I added human approval, tool-scope enforcement, basic prompt-injection defenses,
+> output validation, observable traces, and reproducible evaluations rather
+> than treating the LLM response as trusted output.
 
 ## Resume bullets (draft)
 
-- Built a tool-calling GitHub issue triage agent (list/read issues, search code, draft labels + replies)
-- Added a human approval gate so the agent cannot write to GitHub without review
-- Shipped a Streamlit demo on a free stack (Groq/Gemini + public GitHub API)
-
-## Next (after MVP works)
-
-- Deploy to Hugging Face Spaces
-- Optional: post comment only after explicit approve + write-scope token
-- Tiny eval set: 10 saved issues → did labels look reasonable?
-
-## Sibling portfolio projects (separate repos)
-
-2. Study Notes RAG Agent  
-3. Multi-Agent Research Brief Generator  
+- Built a tool-calling GitHub issue triage agent in Python and Streamlit to
+  inspect public issues/code and generate structured label and reply suggestions
+- Implemented human approval, repository-scoped tools, Pydantic validation, and
+  unsafe-authority checks to constrain untrusted LLM output
+- Added synthetic and public-issue evaluation pipelines plus 29 offline tests
+  covering safety, parsing, schema validation, tool scope, and scoring

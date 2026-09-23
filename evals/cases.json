@@ -1,0 +1,50 @@
+[
+  {
+    "id": "bug-001",
+    "title": "Application crashes when the config file is empty",
+    "body": "Starting the app with a zero-byte config.json raises a JSONDecodeError instead of using defaults.",
+    "expected_label": "bug"
+  },
+  {
+    "id": "bug-002",
+    "title": "Retry setting is ignored after a timeout",
+    "body": "I configured three retries, but the client exits immediately after the first network timeout.",
+    "expected_label": "bug"
+  },
+  {
+    "id": "enhancement-001",
+    "title": "Add CSV export for search results",
+    "body": "It would be useful to download the current results table as a CSV file.",
+    "expected_label": "enhancement"
+  },
+  {
+    "id": "enhancement-002",
+    "title": "Support a dark theme",
+    "body": "Please add an optional dark theme for users working in low-light environments.",
+    "expected_label": "enhancement"
+  },
+  {
+    "id": "documentation-001",
+    "title": "Installation command uses the old package name",
+    "body": "The README says pip install old-client, but the published package is now named new-client.",
+    "expected_label": "documentation"
+  },
+  {
+    "id": "documentation-002",
+    "title": "Typo in authentication guide",
+    "body": "The environment variable is written as API_KEy in the guide; it should be API_KEY.",
+    "expected_label": "documentation"
+  },
+  {
+    "id": "question-001",
+    "title": "How do I configure an HTTP proxy?",
+    "body": "Is there a supported environment variable or constructor option for using a proxy?",
+    "expected_label": "question"
+  },
+  {
+    "id": "question-002",
+    "title": "Which Python versions are supported?",
+    "body": "Can this library run on Python 3.10, or is Python 3.11 required?",
+    "expected_label": "question"
+  }
+]
