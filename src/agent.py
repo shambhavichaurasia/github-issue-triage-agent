@@ -59,7 +59,13 @@ def _secure_http_client() -> httpx.Client:
 def _chat_groq(api_key: str, model: str, messages: list[dict[str, str]]) -> str:
     url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-    payload = {"model": model, "messages": messages, "temperature": 0.2}
+    payload = {
+        "model": model,
+        "messages": messages,
+        "temperature": 0.2,
+        # Keep requests within the selected model's free-tier output limit.
+        "max_tokens": 800,
+    }
     with _secure_http_client() as client:
         response = client.post(url, headers=headers, json=payload)
         if response.status_code == 429:
@@ -73,8 +79,10 @@ def _chat_groq(api_key: str, model: str, messages: list[dict[str, str]]) -> str:
             parts = ["Groq's free-tier rate limit was reached."]
             if retry_after:
                 parts.append(f"Retry after approximately {retry_after} seconds.")
-            elif provider_message:
-                parts.append(provider_message)
+            elif "request too large" in provider_message.lower():
+                parts.append(
+                    "The request exceeded the model's free-tier output limit."
+                )
             else:
                 parts.append("Please wait a few minutes before trying again.")
             raise LLMRateLimitError(" ".join(parts))
