@@ -148,19 +148,3 @@ examples/                    Example output
 - Free LLM tiers can temporarily rate-limit requests.
 - Public repository labels are not standardized across projects.
 
-## Recruiter summary
-
-> I built a read-only GitHub triage agent that autonomously chooses tools to
-> inspect issues and code, then produces a validated label and draft response.
-> I added human approval, tool-scope enforcement, basic prompt-injection defenses,
-> output validation, observable traces, and reproducible evaluations rather
-> than treating the LLM response as trusted output.
-
-## Resume bullets (draft)
-
-- Built a tool-calling GitHub issue triage agent in Python and Streamlit to
-  inspect public issues/code and generate structured label and reply suggestions
-- Implemented human approval, repository-scoped tools, Pydantic validation, and
-  unsafe-authority checks to constrain untrusted LLM output
-- Added synthetic and public-issue evaluation pipelines plus 29 offline tests
-  covering safety, parsing, schema validation, tool scope, and scoring
