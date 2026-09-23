@@ -19,16 +19,17 @@ st.caption(
 )
 
 with st.sidebar:
-    st.header("How to use")
+    st.header("Demo")
     st.markdown(
         """
-1. Copy `.env.example` → `.env`
-2. Add `GITHUB_TOKEN` + Groq or Gemini key
-3. Enter a public repo like `psf/requests`
-4. Run triage → Approve / Reject the suggestion
+- Enter a public repository such as `psf/requests`
+- Optionally enter an issue number such as `7627`
+- Run triage and review the suggestion
+- Use the benchmarks to inspect label accuracy
         """
     )
-    st.markdown("**Safety:** this app does not write to GitHub.")
+    st.markdown("**Read-only:** this app never writes to GitHub.")
+    st.caption("The public demo uses free-tier APIs and may be temporarily rate-limited.")
 
 repo = st.text_input("Public repository", value="psf/requests")
 issue_number_raw = st.text_input("Issue number (optional)", value="")
