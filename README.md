@@ -6,6 +6,10 @@ repository code, and proposes labels plus a maintainer-ready draft response.
 The application is deliberately read-only: it never comments on, labels, or
 changes a GitHub repository.
 
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://shambhavi-issue-triage-agent.streamlit.app/)
+
+**Live demo:** https://shambhavi-issue-triage-agent.streamlit.app/
+
 ## Why this project exists
 
 Popular open-source repositories receive issues that must be understood,
